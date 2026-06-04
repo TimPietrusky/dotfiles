@@ -22,7 +22,8 @@ brew bundle --file=Brewfile
 
 Then open tmux and press **`prefix + I`** (capital i) to install the tmux plugins.
 
-Full step-by-step instructions: **[SETUP.md](SETUP.md)**.
+Full step-by-step instructions: **[SETUP.md](SETUP.md)** (for humans).
+Provisioning with an AI agent on a blank machine: **[AGENTS.md](AGENTS.md)**.
 
 ## What's included
 
