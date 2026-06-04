@@ -1,0 +1,11 @@
+# Secrets / environment variables.
+#
+# Copy this file to ~/.zshenv and fill in your own API keys.
+# NEVER commit your real ~/.zshenv — it stays local to your machine.
+#
+#   cp zsh/.zshenv.example ~/.zshenv
+#   $EDITOR ~/.zshenv
+
+export RUNPOD_API_KEY=
+export FAL_API_KEY=
+export REPLICATE_API_TOKEN=

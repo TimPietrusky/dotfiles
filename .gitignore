@@ -1,0 +1,5 @@
+# Never commit real secrets or local-only files
+.zshenv
+.gitconfig
+*.backup
+.DS_Store
