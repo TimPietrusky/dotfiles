@@ -92,6 +92,12 @@ that, since `~/.p10k.zsh` is already provided.
 If you enabled Karabiner, launch **Karabiner-Elements** once and grant it the
 macOS Input Monitoring / Accessibility permissions it asks for.
 
+Verify the expected symlinks and core CLI tools:
+
+```bash
+./check.sh
+```
+
 ## Notes
 
 - tmux prefix is the default **`Ctrl+B`**. With Karabiner, hold Caps Lock as Ctrl.

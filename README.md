@@ -22,6 +22,12 @@ brew bundle --file=Brewfile
 
 Then open tmux and press **`prefix + I`** (capital i) to install the tmux plugins.
 
+Verify the setup:
+
+```bash
+./check.sh
+```
+
 Full step-by-step instructions: **[SETUP.md](SETUP.md)** (for humans).
 Provisioning with an AI agent on a blank machine: **[AGENTS.md](AGENTS.md)**.
 
@@ -39,6 +45,7 @@ Provisioning with an AI agent on a blank machine: **[AGENTS.md](AGENTS.md)**.
 | `config/karabiner/karabiner.json` | Caps Lock → Esc (tap) / Ctrl (hold) — optional |
 | `Brewfile` | All apps + CLI tools |
 | `install.sh` | Symlinks everything into place (backs up existing files) |
+| `check.sh` | Verifies expected symlinks, local files, and core CLI tools |
 
 ## Secrets
 
