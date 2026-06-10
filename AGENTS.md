@@ -169,7 +169,8 @@ https://claude.com/claude-code . No settings are provisioned from this repo by d
 ## Step 9 — Final verification
 
 ```bash
-zsh -ic 'echo "shell loads"; command -v fnm; command -v fzf; command -v lazygit' 2>/dev/null
+"$DOTFILES/check.sh"
+zsh -ic 'echo "shell loads"' 2>/dev/null
 brew list --cask ghostty >/dev/null 2>&1 && echo "ghostty installed"
 echo "Done. Remaining items require a human (below)."
 ```
