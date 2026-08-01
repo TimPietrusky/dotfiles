@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Dotfiles installer — symlinks configs into place.
-# Existing files are backed up with a .backup extension.
+# Existing real files are backed up with a .backup extension.
 #
 # Usage:
-#   ./install.sh                  # zsh, git, tmux, ghostty
-#   ./install.sh --with-karabiner # also link karabiner (macOS)
+#   ./install.sh                  # everything except karabiner
+#   ./install.sh --with-karabiner # also link karabiner (Caps Lock remap)
 
 set -e
 
@@ -50,6 +50,27 @@ link "$DOTFILES_DIR/tmux/.tmux.conf" ~/.tmux.conf
 echo -e "${GREEN}[ghostty]${NC}"
 link "$DOTFILES_DIR/config/ghostty/config" ~/.config/ghostty/config
 
+echo -e "${GREEN}[gh]${NC}"
+link "$DOTFILES_DIR/config/gh/config.yml" ~/.config/gh/config.yml
+echo -e "  ${BLUE}~/.config/gh/hosts.yml is NOT linked (auth token) — run 'gh auth login'${NC}"
+
+echo -e "${GREEN}[claude code]${NC}"
+link "$DOTFILES_DIR/claude/settings.json"      ~/.claude/settings.json
+link "$DOTFILES_DIR/claude/keybindings.json"   ~/.claude/keybindings.json
+link "$DOTFILES_DIR/claude/CLAUDE.md"          ~/.claude/CLAUDE.md
+link "$DOTFILES_DIR/claude/style-reminder.txt" ~/.claude/style-reminder.txt
+
+echo -e "${GREEN}[codex]${NC}"
+link "$DOTFILES_DIR/codex/config.toml" ~/.codex/config.toml
+
+echo -e "${GREEN}[opencode]${NC}"
+link "$DOTFILES_DIR/config/opencode/opencode.json" ~/.config/opencode/opencode.json
+
+echo -e "${GREEN}[t3 code]${NC}"
+link "$DOTFILES_DIR/t3/settings.json"        ~/.t3/userdata/settings.json
+link "$DOTFILES_DIR/t3/client-settings.json" ~/.t3/userdata/client-settings.json
+link "$DOTFILES_DIR/t3/keybindings.json"     ~/.t3/userdata/keybindings.json
+
 if [ "$1" = "--with-karabiner" ]; then
     echo -e "${GREEN}[karabiner]${NC}"
     link "$DOTFILES_DIR/config/karabiner/karabiner.json" ~/.config/karabiner/karabiner.json
@@ -65,4 +86,8 @@ else
     echo -e "  ${GREEN}already installed${NC}"
 fi
 
-echo -e "\n${GREEN}Done!${NC} Restart your terminal (and finish the steps in SETUP.md)."
+echo -e "\n${GREEN}Done!${NC} Next:"
+echo "  ./packages/install.sh    # node, npm globals, uv, pipx, agent CLIs"
+echo "  ./macos/defaults.sh      # macOS system preferences (optional)"
+echo "  ./check.sh               # verify"
+echo -e "\nThen read ${YELLOW}docs/NOT-IN-THIS-REPO.md${NC} — secrets and GUI steps a script cannot do."

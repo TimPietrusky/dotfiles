@@ -13,6 +13,11 @@ a person (GUI clicks, OS permission dialogs, secrets); stop and hand off there.
 - All steps are idempotent. If a verify already passes, skip the step.
 - **Never fabricate secrets.** Leave `~/.zshenv` as the stub and hand off to a
   human to fill in real API keys. Do not invent or guess keys.
+- **Read [docs/NOT-IN-THIS-REPO.md](docs/NOT-IN-THIS-REPO.md) before you start.**
+  It is the complete inventory of what this repo deliberately does *not* carry —
+  credentials, auth sessions, local state, GUI-only settings — and how each one
+  is restored. Without it you will finish all the steps below and still hand
+  over a machine that cannot push to GitHub or run a single agent.
 - Do not set git `user.name` / `user.email` to anyone but the actual operator.
   If unknown, leave the `~/.gitconfig` template and hand off.
 - After each step, run its verify command and check the exit status before moving on.
@@ -114,9 +119,10 @@ clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/
 
 ## Step 5 — Symlink configs + install TPM
 
-`install.sh` is non-interactive: it symlinks configs, backs up any existing real
-files to `*.backup`, seeds `~/.zshenv` and `~/.gitconfig` from templates if
-absent, and clones TPM.
+`install.sh` is non-interactive: it symlinks configs (shell, tmux, Ghostty, gh,
+Claude Code, Codex, opencode, T3 Code, optionally Karabiner), backs up any
+existing real files to `*.backup`, seeds `~/.zshenv` and `~/.gitconfig` from
+templates if absent, and clones TPM.
 
 ```bash
 "$DOTFILES/install.sh" --with-karabiner   # drop the flag to skip the Caps Lock remap
@@ -126,10 +132,16 @@ absent, and clones TPM.
 
 ```bash
 readlink ~/.zshrc; readlink ~/.tmux.conf; readlink ~/.config/ghostty/config
+readlink ~/.claude/settings.json; readlink ~/.codex/config.toml
 test -d ~/.tmux/plugins/tpm && echo "tpm OK"
 ```
 
 Each `readlink` should point inside `$DOTFILES`.
+
+> The app config directories (`~/.claude`, `~/.codex`, `~/.t3/userdata`,
+> `~/.config/opencode`) are created by `install.sh` if the app hasn't run yet.
+> Symlinking before first launch is fine — every one of these apps reads the
+> file rather than replacing it.
 
 ## Step 6 — Install tmux plugins (non-interactive)
 
@@ -143,50 +155,104 @@ script directly instead:
 **Verify:** `ls ~/.tmux/plugins/` lists `tmux-resurrect`, `tmux-continuum`,
 `tmux-yank` (plus `tpm`).
 
-## Step 7 — Secrets and git identity — **[HUMAN]**
+## Step 7 — Language toolchains and global packages
 
-`install.sh` created `~/.zshenv` (stub) and `~/.gitconfig` (template). The agent
-must NOT fill these. Hand off:
+`packages/install.sh` installs node via `fnm` (pinned in `packages/node-version`),
+the global npm packages, `uv`, the pipx apps, and the agent CLIs that Homebrew
+doesn't ship (`claude`, `opencode`).
+
+```bash
+"$DOTFILES/packages/install.sh"
+```
+
+**Verify:**
+
+```bash
+node -v                                    # matches packages/node-version
+npm ls -g --depth=0                         # matches packages/npm-global.txt
+command -v uv claude opencode
+```
+
+## Step 8 — macOS system preferences (optional)
+
+```bash
+"$DOTFILES/macos/defaults.sh"
+```
+
+This is an opinionated set (fast key repeat, Finder/Dock tweaks, screenshots to
+`~/Desktop/screenshots`, no text auto-substitution), **not** a dump of the source
+machine — that machine was running stock Apple defaults. Skipping it is fine.
+
+**Verify:** `defaults read NSGlobalDomain KeyRepeat` prints `2`.
+
+## Step 9 — Secrets, auth, and git identity — **[HUMAN]**
+
+The agent must NOT fill any of these in. Full table with the restore command for
+each: **[docs/NOT-IN-THIS-REPO.md](docs/NOT-IN-THIS-REPO.md)**. In short:
 
 - `~/.zshenv` — operator pastes real `RUNPOD_API_KEY`, `FAL_API_KEY`,
-  `REPLICATE_API_TOKEN`.
+  `REPLICATE_API_TOKEN`, `BW_SESSION`.
 - `~/.gitconfig` — operator sets their own `name` and `email`.
+- `~/.ssh/id_ed25519` — operator brings the key over, or generates a new one and
+  registers it with GitHub. Do not generate one silently.
+- Interactive logins the operator runs themselves: `gh auth login`,
+  `infisical login`, `claude`, `codex`, `runpodctl config --apiKey ...`,
+  plus every GUI app.
 
 **Verify (presence only, never print values):**
 
 ```bash
 grep -q 'RUNPOD_API_KEY=.\+' ~/.zshenv && echo "keys set" || echo "keys still empty — needs human"
 git config --global user.email >/dev/null && echo "git identity set" || echo "git identity missing — needs human"
+gh auth status >/dev/null 2>&1 && echo "gh ok" || echo "gh not logged in — needs human"
+test -f ~/.ssh/id_ed25519 && echo "ssh key present" || echo "no ssh key — needs human"
 ```
 
-## Step 8 — Claude Code (separate install)
+## Step 10 — Claude Code plugins
 
-Not part of this repo's symlinks, but part of the workflow. Install per
-https://claude.com/claude-code . No settings are provisioned from this repo by design.
+`claude/settings.json` enables `daso-agent-ops@daso-agent-tooling`, which is
+fetched from the private `DasoComputer/agent-tooling` repo. It only resolves
+**after** `gh auth login` (Step 9) — so run this last.
 
-**Verify:** `command -v claude` succeeds (if the operator wants it installed).
+```bash
+claude   # marketplace syncs on launch
+```
 
-## Step 9 — Final verification
+**Verify:** `ls ~/.claude/plugins/marketplaces` lists `daso-agent-tooling`.
+
+## Step 11 — Final verification
 
 ```bash
 "$DOTFILES/check.sh"
 zsh -ic 'echo "shell loads"' 2>/dev/null
-brew list --cask ghostty >/dev/null 2>&1 && echo "ghostty installed"
+brew bundle check --file="$DOTFILES/Brewfile"
 echo "Done. Remaining items require a human (below)."
 ```
 
+`check.sh` distinguishes `miss` (a real failure — fix it) from `note` (waiting on
+a human). Report both categories separately.
+
 ## [HUMAN] — steps an agent cannot complete
 
-These need physical GUI / OS-permission interaction and must be left to a person:
+These need physical GUI / OS-permission interaction and must be left to a person.
+`macos/defaults.sh` prints this list too.
 
 1. **Make Ghostty your terminal** — open `/Applications/Ghostty.app` once
    (Gatekeeper may require right-click → Open the first time). Future work
    happens inside Ghostty.
-2. **Karabiner-Elements permissions** — open the app; macOS will prompt for
-   *Input Monitoring* and *Accessibility* under System Settings → Privacy &
-   Security. The Caps Lock remap does nothing until these are granted.
-3. **API keys & git identity** — Step 7 above.
-4. **Powerlevel10k** — `~/.p10k.zsh` is already provided, so dismiss the
+2. **macOS Privacy & Security grants** — System Settings → Privacy & Security:
+   *Input Monitoring* + *Accessibility* for **Karabiner-Elements** (the Caps Lock
+   remap does nothing until both are granted), *Accessibility* for **Wispr Flow**,
+   *Screen Recording* for **Granola**.
+3. **Secrets, auth, git identity, SSH key** — Step 9 above.
+4. **Login items** — Granola, Wispr Flow, Steam.
+5. **Apps with no cask** — Affinity, DaVinci Resolve, Steam. See
+   [docs/MANUAL-APPS.md](docs/MANUAL-APPS.md).
+6. **Fonts with no cask** — Badd Mono, Kode Mono. Same doc.
+7. **Chrome profiles** — sign in to all three, in order, so directory names match.
+   See [docs/CHROME.md](docs/CHROME.md).
+8. **Apple ID / iCloud, FileVault, Touch ID** (including Touch ID for `sudo`).
+9. **Powerlevel10k** — `~/.p10k.zsh` is already provided, so dismiss the
    `p10k configure` wizard if it appears on first shell launch.
 
 ## Failure handling

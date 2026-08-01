@@ -1,0 +1,17 @@
+# Global npm packages (node v24.14.0 via fnm).
+# Install with: packages/install.sh
+#
+# Deliberately excluded from this list:
+#   npm, corepack      — ship with node
+#   timpietrusky       — a `npm link` to ~/dev/timpietrusky/timpietrusky/card,
+#                        not a registry package
+
+@bitwarden/cli
+agent-browser
+agent-media
+agent-slack
+openclaw
+portless
+vercel
+wandler
+wrangler

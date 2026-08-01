@@ -23,11 +23,13 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 brew bundle --file=Brewfile
 ```
 
-This installs Ghostty, Karabiner-Elements, Cursor, Docker, Slack, the Nerd Fonts,
-and the CLI tools (tmux, fnm, fzf, fd, eza, bat, lazygit, gh, etc.).
+This installs the GUI apps (Ghostty, Karabiner-Elements, Cursor, T3 Code, Chrome,
+Docker, Slack, Discord, Signal, Telegram, KeePassXC, Granola, Wispr Flow, eqMac,
+the Android tooling), the Nerd Fonts, and the CLI tools (tmux, fnm, fzf, fd, eza,
+bat, rg, lazygit, gh, terraform, infisical, beads, ffmpeg, …).
 
-Install **Claude Code** separately — see https://claude.com/claude-code.
-(Claude settings are intentionally *not* part of this repo.)
+A few apps and fonts have no cask and must be installed by hand — see
+[docs/MANUAL-APPS.md](docs/MANUAL-APPS.md).
 
 ## 2. Oh My Zsh + Powerlevel10k + zsh plugins
 
@@ -63,19 +65,49 @@ This symlinks:
 - `~/.zshrc`, `~/.zprofile`, `~/.p10k.zsh`
 - `~/.tmux.conf`
 - `~/.config/ghostty/config`
+- `~/.config/gh/config.yml` (not `hosts.yml` — that's your auth token)
+- `~/.claude/{settings.json,keybindings.json,CLAUDE.md,style-reminder.txt}`
+- `~/.codex/config.toml`
+- `~/.config/opencode/opencode.json`
+- `~/.t3/userdata/{settings,client-settings,keybindings}.json`
 - `~/.config/karabiner/karabiner.json` (only with `--with-karabiner`)
 
 …and creates `~/.zshenv` and `~/.gitconfig` from the templates if they don't
 exist yet. It also installs TPM (the tmux plugin manager).
 
-## 4. Add your secrets and git identity
+## 4. Language toolchains and global packages
 
 ```bash
-$EDITOR ~/.zshenv      # paste your own RUNPOD / FAL / REPLICATE keys
-$EDITOR ~/.gitconfig   # set your own name + email
+./packages/install.sh
 ```
 
-## 5. Finish up
+Installs node (version pinned in `packages/node-version`) via `fnm`, the global
+npm packages, `uv`, the pipx apps, and the `claude` / `opencode` CLIs.
+
+## 5. macOS system preferences (optional)
+
+```bash
+./macos/defaults.sh
+```
+
+Fast key repeat, Finder/Dock tweaks, screenshots into `~/Desktop/screenshots`,
+no text auto-substitution. It prints the GUI-only steps at the end.
+
+## 6. Add your secrets and git identity
+
+```bash
+$EDITOR ~/.zshenv      # paste your own RUNPOD / FAL / REPLICATE / BW keys
+$EDITOR ~/.gitconfig   # set your own name + email
+
+gh auth login          # GitHub (needed before Claude Code plugins resolve)
+infisical login
+```
+
+Bring your SSH key over from the old machine, or generate a new one and add it
+to GitHub. The complete list of what needs a human — and how to restore each
+item — is in **[docs/NOT-IN-THIS-REPO.md](docs/NOT-IN-THIS-REPO.md)**.
+
+## 7. Finish up
 
 ```bash
 # Reload the shell
@@ -101,4 +133,8 @@ Verify the expected symlinks and core CLI tools:
 ## Notes
 
 - tmux prefix is the default **`Ctrl+B`**. With Karabiner, hold Caps Lock as Ctrl.
-- All real secrets stay in `~/.zshenv`, which is never committed.
+- All real secrets stay in `~/.zshenv`, which is never committed. Better: pull
+  them at use time from Infisical or Bitwarden instead of hardcoding.
+- `check.sh` prints `miss` for real failures and `note` for things that are
+  waiting on you (auth, keys, fonts).
+- Chrome profiles need to be signed in by hand — [docs/CHROME.md](docs/CHROME.md).

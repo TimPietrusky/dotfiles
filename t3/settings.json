@@ -1,0 +1,26 @@
+{
+  "providerInstances": {
+    "codex": {
+      "driver": "codex",
+      "enabled": true,
+      "config": {
+        "enabled": false,
+        "binaryPath": "codex",
+        "homePath": "",
+        "shadowHomePath": "",
+        "customModels": []
+      }
+    },
+    "opencode": {
+      "driver": "opencode",
+      "enabled": true,
+      "config": {
+        "enabled": false,
+        "binaryPath": "opencode",
+        "serverUrl": "",
+        "serverPassword": "",
+        "customModels": []
+      }
+    }
+  }
+}

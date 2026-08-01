@@ -113,3 +113,11 @@ eval "$(fnm env --use-on-cd --shell zsh)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# android sdk (needs casks android-commandlinetools + android-platform-tools)
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export JAVA_HOME="/opt/homebrew/opt/openjdk@17"
+export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
+
+# opencode
+export PATH="$HOME/.opencode/bin:$PATH"

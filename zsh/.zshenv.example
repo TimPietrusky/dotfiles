@@ -5,7 +5,20 @@
 #
 #   cp zsh/.zshenv.example ~/.zshenv
 #   $EDITOR ~/.zshenv
+#
+# HEADS UP: anything exported here is readable by every process in every shell,
+# including every coding agent you run. Prefer pulling secrets at use time from
+# Infisical (`infisical run -- <cmd>`) or Bitwarden (`bw get item ...`) — both are
+# already installed via the Brewfile / packages/npm-global.txt.
+#
+# An agent provisioning this machine must NEVER fill these in or invent values.
+# See docs/NOT-IN-THIS-REPO.md.
 
 export RUNPOD_API_KEY=
 export FAL_API_KEY=
 export REPLICATE_API_TOKEN=
+
+# Bitwarden CLI session handle. Do NOT hardcode a long-lived value — mint it
+# per session instead:
+#   export BW_SESSION="$(bw unlock --raw)"
+export BW_SESSION=

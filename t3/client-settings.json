@@ -1,0 +1,18 @@
+{
+    "autoOpenPlanSidebar": false,
+    "confirmThreadArchive": false,
+    "confirmThreadDelete": true,
+    "dismissedProviderUpdateNotificationKeys": [],
+    "diffIgnoreWhitespace": true,
+    "favorites": [],
+    "providerModelPreferences": {},
+    "sidebarAutoSettleAfterDays": 10,
+    "sidebarProjectGroupingMode": "repository",
+    "sidebarProjectGroupingOverrides": {},
+    "sidebarProjectSortOrder": "updated_at",
+    "sidebarThreadSortOrder": "updated_at",
+    "sidebarThreadPreviewCount": 6,
+    "sidebarV2Enabled": false,
+    "timestampFormat": "locale",
+    "wordWrap": true
+}

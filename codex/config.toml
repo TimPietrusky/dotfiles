@@ -1,0 +1,11 @@
+# OpenAI Codex CLI — symlinked to ~/.codex/config.toml
+#
+# NOTE: the live file on the source machine also accumulates a
+# [projects."/path"] trust_level table and [notice.*] / [tui.*] state as you use
+# it. Those are machine-local and intentionally not tracked here — Codex
+# re-creates them. Only the real preferences live in this file.
+
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+approvals_reviewer = "user"
+service_tier = "fast"

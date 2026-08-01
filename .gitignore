@@ -1,5 +1,22 @@
-# Never commit real secrets or local-only files
+# Never commit real secrets or local-only files.
+# The full inventory of what stays out (and why) lives in docs/NOT-IN-THIS-REPO.md
+
+# Secrets / identity
 .zshenv
 .gitconfig
+hosts.yml
+auth.json
+credentials.json
+clerk-tokens.json
+*.pem
+*.key
+*.kdbx
+id_*
+!id_*.example
+
+# Local state
 *.backup
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
 .DS_Store
