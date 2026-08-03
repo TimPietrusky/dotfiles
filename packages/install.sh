@@ -42,5 +42,16 @@ command -v opencode >/dev/null 2>&1 || curl -fsSL https://opencode.ai/install | 
 echo "==> a2go"
 command -v a2go >/dev/null 2>&1 || echo "    not installed — see https://github.com/TimPietrusky/a2go"
 
+echo "==> Cursor extensions"
+if command -v cursor >/dev/null 2>&1; then
+  grep -vE '^\s*(#|$)' "$HERE/../cursor/extensions.txt" | while read -r ext; do
+    echo "    $ext"
+    cursor --install-extension "$ext" --force >/dev/null
+  done
+else
+  echo "    'cursor' not on PATH — open Cursor once and run"
+  echo "    'Shell Command: Install cursor command' from the palette, then re-run"
+fi
+
 echo
 echo "Done. Auth for these tools is per-machine — see docs/NOT-IN-THIS-REPO.md."

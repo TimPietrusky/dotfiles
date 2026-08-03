@@ -71,6 +71,16 @@ link "$DOTFILES_DIR/t3/settings.json"        ~/.t3/userdata/settings.json
 link "$DOTFILES_DIR/t3/client-settings.json" ~/.t3/userdata/client-settings.json
 link "$DOTFILES_DIR/t3/keybindings.json"     ~/.t3/userdata/keybindings.json
 
+echo -e "${GREEN}[cursor]${NC}"
+link "$DOTFILES_DIR/cursor/settings.json" "$HOME/Library/Application Support/Cursor/User/settings.json"
+
+echo -e "${GREEN}[keepassxc]${NC}"
+link "$DOTFILES_DIR/keepassxc/keepassxc.ini" "$HOME/Library/Application Support/KeePassXC/keepassxc.ini"
+echo -e "  ${BLUE}the .kdbx vault is NOT in this repo — move it over yourself${NC}"
+
+echo -e "${GREEN}[docker]${NC}"
+link "$DOTFILES_DIR/docker/daemon.json" ~/.docker/daemon.json
+
 if [ "$1" = "--with-karabiner" ]; then
     echo -e "${GREEN}[karabiner]${NC}"
     link "$DOTFILES_DIR/config/karabiner/karabiner.json" ~/.config/karabiner/karabiner.json

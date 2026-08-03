@@ -29,7 +29,7 @@ Stop and hand off to the operator.**
 | `~/.dolt/config_global.json` | Dolt user identity / creds | `dolt config --global --add user.email ...` |
 | `~/.docker/config.json` | Points at the macOS keychain cred store | Recreated by Docker Desktop on login. |
 | `~/.portless/*.pem`, `ca-key.pem` | Local TLS CA + server keys for `*.localhost` | **Do not migrate a CA private key.** Reinstall `portless` and let it mint a fresh CA. |
-| `~/Documents/timpietrusky/*.kdbx` | KeePassXC vault (copies also in `~/Downloads`) | Move over the vault yourself, out of band. Never near a git repo. |
+| `~/Documents/timpietrusky/*.kdbx` | KeePassXC vault — the actual passwords (stale copies also in `~/Downloads`) | Move over the vault yourself, out of band. Never near a git repo. The app's *settings* (`keepassxc.ini`) **are** tracked, see `keepassxc/`. |
 | macOS Keychain | Wi-Fi, app tokens, certificates | Not migratable by script — use Migration Assistant or re-auth each app. |
 
 > ### ⚠️ `~/.zshenv` is currently plaintext secrets in `$HOME`
@@ -67,6 +67,12 @@ Regenerated automatically; listed so nobody hunts for them.
   `~/.t3/userdata/desktop-settings.json` (window geometry).
 - `~/Library/Application Support/t3code/` and `.../Cursor/{History,globalStorage,workspaceStorage}`
   — Electron profiles, cookies, caches.
+- `~/Library/Preferences/*.plist` for **eqMac** (`com.bitgapp.eqmac`), **Wispr Flow**
+  (`com.electron.wispr-flow`), **Granola** (`com.granola.app`) and **Ghostty**
+  (`com.mitchellh.ghostty`). Binary plists mixing real preferences with account
+  state and window geometry — not portable. Ghostty's real config is the tracked
+  `config/ghostty/config`; the other three are per-app settings you re-set after
+  signing in (eqMac EQ presets in particular have to be rebuilt by hand).
 - `~/.agent-browser/{browsers,sessions}`, `~/.agent-slack/tmp`,
   `~/.openclaw/{browser-profiles,devices,discord-browser,*.png}`.
 - `~/.a2go/{venv,cache,models,images,audio,logs,pids}` — multi-GB model cache; re-download.

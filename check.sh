@@ -58,6 +58,11 @@ check_link "$DOTFILES_DIR/t3/settings.json" "$HOME/.t3/userdata/settings.json"
 check_link "$DOTFILES_DIR/t3/client-settings.json" "$HOME/.t3/userdata/client-settings.json"
 check_link "$DOTFILES_DIR/t3/keybindings.json" "$HOME/.t3/userdata/keybindings.json"
 
+printf '\napp configs\n'
+check_link "$DOTFILES_DIR/cursor/settings.json" "$HOME/Library/Application Support/Cursor/User/settings.json"
+check_link "$DOTFILES_DIR/keepassxc/keepassxc.ini" "$HOME/Library/Application Support/KeePassXC/keepassxc.ini"
+check_link "$DOTFILES_DIR/docker/daemon.json" "$HOME/.docker/daemon.json"
+
 printf '\nlocal files\n'
 [ -f "$HOME/.zshenv" ] && pass "$HOME/.zshenv" || fail "$HOME/.zshenv"
 [ -f "$HOME/.gitconfig" ] && pass "$HOME/.gitconfig" || fail "$HOME/.gitconfig"

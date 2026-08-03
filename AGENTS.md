@@ -120,9 +120,9 @@ clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM/plugins/
 ## Step 5 — Symlink configs + install TPM
 
 `install.sh` is non-interactive: it symlinks configs (shell, tmux, Ghostty, gh,
-Claude Code, Codex, opencode, T3 Code, optionally Karabiner), backs up any
-existing real files to `*.backup`, seeds `~/.zshenv` and `~/.gitconfig` from
-templates if absent, and clones TPM.
+Claude Code, Codex, opencode, T3 Code, Cursor, KeePassXC, Docker, optionally
+Karabiner), backs up any existing real files to `*.backup`, seeds `~/.zshenv` and
+`~/.gitconfig` from templates if absent, and clones TPM.
 
 ```bash
 "$DOTFILES/install.sh" --with-karabiner   # drop the flag to skip the Caps Lock remap

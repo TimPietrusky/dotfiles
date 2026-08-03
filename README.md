@@ -51,6 +51,13 @@ For an AI agent on a blank machine: **[AGENTS.md](AGENTS.md)**.
 | `config/gh/config.yml` | `gh` CLI: `co` alias, prompt behaviour |
 | `packages/skills.txt` | Which agent skills were installed (not vendored) |
 
+### Apps
+| Path | Purpose |
+|------|---------|
+| `cursor/` | Cursor settings + extension list — [details](cursor/README.md) |
+| `keepassxc/` | KeePassXC settings (128-char generator). **The vault is not here** — [details](keepassxc/README.md) |
+| `docker/daemon.json` | 20 GB BuildKit cache with GC — [details](docker/README.md) |
+
 ### Everything else
 | Path | Purpose |
 |------|---------|
