@@ -1,0 +1,6 @@
+# Cursor extensions. Install with:
+#   cursor --install-extension <id>
+# packages/install.sh does this automatically if `cursor` is on PATH.
+
+anysphere.remote-containers
+anysphere.remote-ssh

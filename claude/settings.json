@@ -1,0 +1,39 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "model": "opus[1m]",
+  "effortLevel": "high",
+  "tui": "fullscreen",
+  "theme": "dark",
+  "skipDangerousModePermissionPrompt": true,
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat ~/.claude/style-reminder.txt",
+            "statusMessage": "style reminder"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "daso-agent-ops@daso-agent-tooling": true
+  },
+  "extraKnownMarketplaces": {
+    "daso-agent-tooling": {
+      "source": {
+        "source": "github",
+        "repo": "DasoComputer/agent-tooling",
+        "sparsePaths": [
+          ".claude-plugin",
+          "plugins"
+        ]
+      }
+    }
+  }
+}

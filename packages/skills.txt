@@ -1,0 +1,61 @@
+# Agent skills installed on the source machine (2026-08-01).
+#
+# NOT vendored into this repo on purpose — most come from upstream repos or
+# plugin marketplaces and copies would rot. This file exists so a provisioning
+# agent knows what to expect and can re-install / flag what's missing.
+
+## ~/.claude/skills — Claude Code global skills
+a2go
+agent-browser
+agent-media
+agent-slack
+agents-sdk
+agnt-init
+agnt-prune
+cloudflare
+cloudflare-email-service
+cloudflare-one
+cloudflare-one-migrations
+durable-objects
+find-skills
+flash
+frontend-design
+image-convert
+image-crop
+image-edit
+image-extend
+image-generate
+image-remove-background
+image-resize
+image-upscale
+nerddisco-cv
+portless
+sandbox-sdk
+skill-creator
+turnstile-spin
+web-perf
+workers-best-practices
+wrangler
+
+## ~/.agents/skills — shared cross-agent skills (managed by a skill lockfile)
+# Same set minus the Cloudflare ones. Restore by re-running the installers of
+# the packages that ship them (agent-browser, agent-media, agent-slack, a2go,
+# flash, portless, wandler) — they drop their own SKILL.md.
+
+## ~/.config/opencode/skills — Cloudflare skill pack for opencode
+agents-sdk
+cloudflare
+cloudflare-email-service
+cloudflare-one
+cloudflare-one-migrations
+durable-objects
+sandbox-sdk
+turnstile-spin
+web-perf
+workers-best-practices
+wrangler
+
+## Plugin marketplace (declared in claude/settings.json)
+# daso-agent-ops@daso-agent-tooling  ->  github:DasoComputer/agent-tooling
+#   skills: cyber-audit, effective-agent-skills, inbox-zero, setup-help
+#   requires `gh auth login` first (private repo)
