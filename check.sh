@@ -81,21 +81,33 @@ done
 printf '\nsecrets / auth (presence only — values never printed)\n'
 grep -qE '^export RUNPOD_API_KEY=.+' "$HOME/.zshenv" 2>/dev/null \
     && pass "~/.zshenv has keys" || note "~/.zshenv still a stub — needs a human"
-git config --global user.email >/dev/null 2>&1 \
-    && pass "git identity set" || note "git identity missing — needs a human"
+git_email="$(git config --global user.email 2>/dev/null || true)"
+case "$git_email" in
+    ""|"you@example.com")
+        note "git identity still the template placeholder — needs a human" ;;
+    *)
+        pass "git identity set" ;;
+esac
 gh auth status >/dev/null 2>&1 \
     && pass "gh authenticated" || note "gh not logged in — run 'gh auth login'"
 [ -f "$HOME/.ssh/id_ed25519" ] \
     && pass "ssh key present" || note "no ~/.ssh/id_ed25519 — needs a human"
 
 printf '\nfonts\n'
-for font in "JetBrainsMono Nerd Font" "Symbols Nerd Font Mono"; do
-    if system_profiler SPFontsDataType 2>/dev/null | grep -q "$font"; then
-        pass "$font"
-    else
-        note "$font not detected — Ghostty will render wrong"
-    fi
-done
+# Ghostty's config names these explicitly; without them it silently falls back
+# to the system monospace and the powerlevel10k glyphs render as boxes.
+font_installed() {
+    local pattern="$1"
+    ls ~/Library/Fonts /Library/Fonts 2>/dev/null | grep -qi "$pattern" && return 0
+    brew list --cask 2>/dev/null | grep -qi "$pattern" && return 0
+    return 1
+}
+font_installed "jetbrains.*mono.*nerd\|font-jetbrains-mono-nerd" \
+    && pass "JetBrainsMono Nerd Font" \
+    || note "JetBrainsMono Nerd Font missing — Ghostty falls back, p10k glyphs break"
+font_installed "symbols.*nerd\|font-symbols-only-nerd" \
+    && pass "Symbols Nerd Font Mono" \
+    || note "Symbols Nerd Font Mono missing — icon glyphs will render as boxes"
 
 printf '\n'
 if [ "$failures" -eq 0 ]; then
